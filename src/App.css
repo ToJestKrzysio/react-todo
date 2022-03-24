@@ -39,11 +39,11 @@
 }
 
 .active {
-    background: orangered;
+    background: red;
 }
 
 .done {
-    background: greenyellow;
+    background: forestgreen;
 }
 
 .todo-item {
