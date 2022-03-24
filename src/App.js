@@ -7,11 +7,16 @@ import uuidGen from "./utils/uuid";
 import Headline from "./components/Headline";
 import TaskInput from "./components/TaskInput";
 import TasksList from "./components/TasksList";
+import TasksCounter from "./components/TasksCounter";
+import ClearCompleted from "./components/ClearCompleted";
+import StatusFiltering from "./components/StatusFiltering";
+import TasksGroup from "./components/TasksGroup";
 
 
 function App() {
     const [value, setValue] = useState("");
     const [tasks, setTasks] = useState([]);
+    const [selection, setSelection] = useState("all")
 
     useEffect(() => {
         setTasks(loadFromLocalStorage("todos"))
@@ -50,6 +55,10 @@ function App() {
         setTasks(tasks.filter(task => task.id !== id))
     }
 
+    function handleDeleteCompleted() {
+        setTasks(tasks.filter(task => !task.status))
+    }
+
     return (
         <div className="App">
             <Headline/>
@@ -57,10 +66,13 @@ function App() {
                 value={value}
                 handleChange={handleChange}
                 handleKeyUp={handleKeyUp}/>
-            <TasksList
+            <TasksGroup
                 tasks={tasks}
+                selection={selection}
+                setSelection={setSelection}
                 handleChangeStatus={handleChangeStatus}
-                handleDeleteTask={handleDeleteTask}/>
+                handleDeleteTask={handleDeleteTask}
+                handleDeleteCompleted={handleDeleteCompleted}/>
         </div>
     );
 }

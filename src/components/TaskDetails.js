@@ -4,7 +4,7 @@ function TaskDetails({id, name, status, handleChangeStatus, handleDeleteTask}) {
             <span
                 className={status ? "status done" : "status active"}
                 onClick={() => handleChangeStatus(id)}/>
-            {name}
+            <span>{name}</span>
             <button className="button-delete" onClick={() => handleDeleteTask(id)}>X</button>
         </li>
     );

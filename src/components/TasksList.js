@@ -1,9 +1,11 @@
 import TaskDetails from "./TaskDetails";
 
-function TasksList({tasks, handleChangeStatus, handleDeleteTask}) {
+function TasksList({tasks, selection, handleChangeStatus, handleDeleteTask}) {
     return (
         <ul>
-            {tasks.map(({id, name, status}) =>
+            {tasks
+                .filter((e) => selection === "all" || selection === e.status)
+                .map(({id, name, status}) =>
                 <TaskDetails
                     key={id}
                     id={id}
