@@ -1,20 +1,32 @@
 import './App.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-function* uuid_generator() {
-    let id = 0;
-    while (true) {
-        yield id
-        id++;
+function loadFromLocalStorage(key) {
+    const data = localStorage.getItem(key)
+    if (data !== null) {
+        return JSON.parse(data);
     }
+    return []
 }
 
-const uuid = uuid_generator()
+function saveToLocalStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+}
+
+const uuidGen = () => Math.max(...(loadFromLocalStorage("todos").map(e => e.id)), 0) + 1;
 
 
 function App() {
     const [value, setValue] = useState("");
     const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        setTasks(loadFromLocalStorage("todos"))
+    }, [])
+
+    useEffect(() => {
+        saveToLocalStorage("todos", tasks)
+    }, [tasks])
 
     function handleChange(event) {
         setValue(event.target.value)
@@ -24,28 +36,25 @@ function App() {
         if (event.key === "Enter" && value !== "") {
             let newTask = {
                 name: value,
-                id: uuid.next().value,
+                id: uuidGen(),
                 status: false
             }
-            const newTasks = [...tasks, newTask]
-            setTasks(newTasks)
+            setTasks([...tasks, newTask])
             setValue("")
         }
     }
 
     function handleChangeStatus(id) {
-        const newTasks = tasks.map(task => {
+        setTasks(tasks.map(task => {
             if (task.id === id) {
                 task.status = !task.status
             }
             return task
-        })
-        setTasks(newTasks)
+        }))
     }
 
     function handleDeleteTask(id) {
-        const newTasks = tasks.filter(task => task.id !== id)
-        setTasks(newTasks)
+        setTasks(tasks.filter(task => task.id !== id))
     }
 
     return (
