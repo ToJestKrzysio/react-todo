@@ -1,10 +1,9 @@
 import './App.css';
 import {useEffect, useState} from "react";
 
-import {collection, getDocs} from "firebase/firestore"
+import {collection, getDocs, addDoc} from "firebase/firestore"
 
 import {loadFromLocalStorage, saveToLocalStorage} from "./utils/localstorage";
-import uuidGen from "./utils/uuid";
 
 import Headline from "./components/Headline";
 import TaskInput from "./components/TaskInput";
@@ -27,10 +26,11 @@ function App() {
 
     useEffect(getData, [])
 
-    async function saveToFirestore(tasks) {
-        const data = tasks.map((id, name, status) => ({id, data: {name, status}}))
+    async function addToFirestore(tasks) {
+        const data = {};
+        tasks.forEach((id, name, status) => data[id] = {name, status})
         const dataRef = db.collection("todos")
-        dataRef.get().forEach((doc) => doc.set())
+        dataRef.forEach((doc) => doc.set(data[doc.id]))
     }
 
     useEffect(() => {
@@ -39,21 +39,21 @@ function App() {
 
     useEffect(() => {
         saveToLocalStorage("todos", tasks)
-        saveToFirestore(tasks)
     }, [tasks])
 
     function handleChange(event) {
         setValue(event.target.value)
     }
 
-    function handleKeyUp(event) {
+    async function handleKeyUp(event) {
         if (event.key === "Enter" && value !== "") {
-            let newTask = {
+            const newTask = {
                 name: value,
-                id: uuidGen(),
                 status: false
             }
-            setTasks([...tasks, newTask])
+
+            const docRef = await addDoc(collection(db, "todos"), newTask);
+            setTasks([Object.assign(newTask, {id: docRef.id}), ...tasks])
             setValue("")
         }
     }
