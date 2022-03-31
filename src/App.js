@@ -1,16 +1,15 @@
 import './App.css';
 import {useEffect, useState} from "react";
 
+import {collection, getDocs} from "firebase/firestore"
+
 import {loadFromLocalStorage, saveToLocalStorage} from "./utils/localstorage";
 import uuidGen from "./utils/uuid";
 
 import Headline from "./components/Headline";
 import TaskInput from "./components/TaskInput";
-import TasksList from "./components/TasksList";
-import TasksCounter from "./components/TasksCounter";
-import ClearCompleted from "./components/ClearCompleted";
-import StatusFiltering from "./components/StatusFiltering";
 import TasksGroup from "./components/TasksGroup";
+import {db} from "./firebase";
 
 
 function App() {
@@ -18,12 +17,29 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [selection, setSelection] = useState("all")
 
+    const getData = async () => {
+        const querySnapshot = await getDocs(collection(db, "todos"));
+        setTasks(querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        })));
+    }
+
+    useEffect(getData, [])
+
+    async function saveToFirestore(tasks) {
+        const data = tasks.map((id, name, status) => ({id, data: {name, status}}))
+        const dataRef = db.collection("todos")
+        dataRef.get().forEach((doc) => doc.set())
+    }
+
     useEffect(() => {
         setTasks(loadFromLocalStorage("todos"))
     }, [])
 
     useEffect(() => {
         saveToLocalStorage("todos", tasks)
+        saveToFirestore(tasks)
     }, [tasks])
 
     function handleChange(event) {
