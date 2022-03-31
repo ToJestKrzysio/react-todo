@@ -1,18 +1,16 @@
-import TaskDetails from "./TaskDetails";
+import TaskItem from "./TaskItem";
 
-function TasksList({tasks, selection, handleChangeStatus, handleDeleteTask}) {
+function TasksList({tasks, selection}) {
     return (
         <ul>
             {tasks
                 .filter((e) => selection === "all" || selection === e.status)
                 .map(({id, name, status}) =>
-                <TaskDetails
+                <TaskItem
                     key={id}
                     id={id}
                     name={name}
-                    status={status}
-                    handleChangeStatus={handleChangeStatus}
-                    handleDeleteTask={handleDeleteTask}/>
+                    status={status}/>
             )}
         </ul>
     );
