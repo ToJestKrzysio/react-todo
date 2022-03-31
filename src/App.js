@@ -1,7 +1,7 @@
 import './App.css';
 import {useEffect, useState} from "react";
 
-import {collection, getDocs, addDoc} from "firebase/firestore"
+import {collection, doc, getDocs, addDoc, updateDoc, deleteDoc, writeBatch} from "firebase/firestore"
 
 import {loadFromLocalStorage, saveToLocalStorage} from "./utils/localstorage";
 
@@ -25,13 +25,6 @@ function App() {
     }
 
     useEffect(getData, [])
-
-    async function addToFirestore(tasks) {
-        const data = {};
-        tasks.forEach((id, name, status) => data[id] = {name, status})
-        const dataRef = db.collection("todos")
-        dataRef.forEach((doc) => doc.set(data[doc.id]))
-    }
 
     useEffect(() => {
         setTasks(loadFromLocalStorage("todos"))
@@ -58,20 +51,30 @@ function App() {
         }
     }
 
-    function handleChangeStatus(id) {
-        setTasks(tasks.map(task => {
-            if (task.id === id) {
-                task.status = !task.status
-            }
-            return task
-        }))
+    async function handleChangeStatus(id) {
+        const updatedTask = tasks.filter(task => task.id === id)[0];
+        updatedTask.status = !updatedTask.status
+        setTasks([...tasks])
+
+        await updateDoc(doc(db, "todos", id), {status: updatedTask.status})
     }
 
-    function handleDeleteTask(id) {
+    async function handleDeleteTask(id) {
+        await deleteDoc(doc(db, "todos", id));
         setTasks(tasks.filter(task => task.id !== id))
+
     }
 
-    function handleDeleteCompleted() {
+    async function handleDeleteCompleted() {
+        const batch = writeBatch(db);
+        tasks.forEach(({id, status}) => {
+            if(status){
+                const ref = doc(db, "todos", id);
+                batch.delete(ref)
+            }
+        })
+        await batch.commit()
+
         setTasks(tasks.filter(task => !task.status))
     }
 
