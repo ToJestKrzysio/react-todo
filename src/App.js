@@ -29,11 +29,13 @@ function App() {
     return (
         <div className="App">
             <Headline/>
-            <TaskInput/>
-            <TasksGroup
-                tasks={tasks}
-                selection={selection}
-                setSelection={setSelection}/>
+            <div className="container">
+                <TaskInput/>
+                <TasksGroup
+                    tasks={tasks}
+                    selection={selection}
+                    setSelection={setSelection}/>
+            </div>
         </div>
     );
 }

@@ -1,0 +1,187 @@
+@import "./utils.scss";
+
+.hdl {
+  font-family: "Helvetica Neue", Helvetica, Arials, sans-serif;
+  font-size: toRem(100);
+  color: rgba(175, 47, 47, 0.15);
+  font-weight: 100;
+  text-align: center;
+  margin-top: toRem(10);
+  margin-bottom: toRem(5);
+}
+
+.container {
+  box-shadow: 0 toRem(2) toRem(4) rgb(0 0 0 / 20%), 0 toRem(24) toRem(50) 0 rgb(0 0 0 / 10%);
+  width: 100%;
+  max-width: toRem(550);
+  margin: auto;
+  background-color: white;
+}
+
+.input {
+  font-size: toRem(24);
+  padding: toRem(19) toRem(16) toRem(19) toRem(60);
+  border: none;
+  box-shadow: inset 0 toRem(-2) toRem(1) rgb(0 0 0 / 3%);
+  background-color: rgba(0, 0, 0, 0.003);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Helvetica, Arials, sans-serif;
+  font-weight: 300;
+  color: rgb(77 77 77);
+
+  &::placeholder {
+    font-family: Helvetica, Arials, sans-serif;
+    font-style: italic;
+    font-weight: 300;
+    color: #e6e6e6;
+  }
+
+}
+
+.status {
+  display: inline-block;
+  height: toRem(40);
+  width: toRem(40);
+  background-image: url("../images/icon.svg");
+  margin-right: toRem(20);
+  cursor: pointer;
+
+  & + span {
+    transition: all 200ms;
+  }
+}
+
+.active {
+
+}
+
+.done {
+  background-image: url("../images/icon-done.svg");
+
+  & + span {
+    text-decoration: line-through;
+    color: #d9d9d9;
+  }
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+  padding-left: 0;
+  margin: 0;
+  border-top: toRem(1) solid #e6e6e6;
+}
+
+.todo-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+
+  font-family: "Helvetica Neue", Helvetica, Arials, sans-serif;
+  font-size: toRem(24);
+  font-weight: 300;
+  color: rgb(77 77 77);
+
+  padding: toRem(9) toRem(45) toRem(9) toRem(0);
+  border-bottom: toRem(1) solid #e6e6e6;
+  position: relative;
+
+  .button-delete {
+    opacity: 0;
+    transition: opacity 400ms;
+    position: absolute;
+    right: toRem(15);
+    border: none;
+    background: none;
+    color: transparent;
+    cursor: pointer;
+
+    &:after {
+      content: '×';
+      width: toRem(40);
+      height: toRem(40);
+      font-size: toRem(30);
+      color: #cc9a9a;
+      top: toRem(-5);
+      left: 0;
+    }
+  }
+}
+
+.todo-item:hover .button-delete {
+  opacity: 1;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & > *:first-child {
+    width: 50%;
+    color: #777;
+    line-height: 1.4;
+    float: left;
+    text-align: left;
+    font-size: toRem(14);
+    padding: 0 15px;
+    font-family: "Helvetica Neue", Helvetica, Arials, sans-serif;
+  }
+
+  & > *:nth-child(2) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    button {
+      color: #777;
+      font-size: toRem(14);
+      font-weight: 300;
+      font-family: "Helvetica Neue", Helvetica, Arials, sans-serif;
+      line-height: toRem(20);
+      text-decoration: none;
+      padding: toRem(1) toRem(5);
+      margin: 0 toRem(5);
+      cursor: pointer;
+      border: toRem(1) solid transparent;
+      border-radius: toRem(3);
+      background: none;
+
+      &.active {
+        border-color: rgba(175, 47, 47, 0.2);
+      }
+
+      &:hover {
+        border-color: rgba(175, 47, 47, 0.1);
+      }
+    }
+
+  }
+
+  & > *:last-child {
+    flex-grow: 1;
+    width: 50%;
+
+    button {
+      color: #777;
+      font-size: toRem(14);
+      font-weight: 300;
+      font-family: "Helvetica Neue", Helvetica, Arials, sans-serif;
+      line-height: toRem(20);
+      text-decoration: none;
+      padding: 0 toRem(5);
+      cursor: pointer;
+      border: 0;
+      background: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+}

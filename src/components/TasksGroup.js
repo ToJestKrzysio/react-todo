@@ -14,7 +14,7 @@ function TasksGroup({tasks, selection, setSelection}) {
     async function handleDeleteCompleted() {
         const batch = writeBatch(db);
         tasks.forEach(({id, status}) => {
-            if(status){
+            if (status) {
                 const ref = doc(db, "todos", id);
                 batch.delete(ref)
             }
@@ -27,9 +27,13 @@ function TasksGroup({tasks, selection, setSelection}) {
             <TasksList
                 tasks={tasks}
                 selection={selection}/>
-            <TasksCounter tasks={tasks}/>
-            <StatusFiltering setSelection={setSelection}/>
-            <ClearCompleted tasks={tasks} handleDeleteCompleted={handleDeleteCompleted}/>
+            <div className="footer">
+                <TasksCounter tasks={tasks}/>
+                <StatusFiltering setSelection={setSelection} selection={selection}/>
+                <div>
+                    <ClearCompleted tasks={tasks} handleDeleteCompleted={handleDeleteCompleted}/>
+                </div>
+            </div>
         </div>
     )
 }
