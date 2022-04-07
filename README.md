@@ -6,8 +6,8 @@
 * scss
 
 ## How to use
-1. git clone 
-2. npm install
-3. npm run
+1. ```git clone https://github.com/ToJestKrzysio/react-todo.git```
+2. ```npm install```
+3. ```npm run```
 
 ## [Link to live version]([https://todo-14d41.web.app/])
